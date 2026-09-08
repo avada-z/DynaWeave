@@ -104,16 +104,61 @@ This experiment uses a wall-clock flow-training budget. The archived flow has
 62,971,232 parameters and was saved at step 7,000; the command is a reproduction
 entry point, not a guarantee of the same stopping step or identical outputs.
 
-## Resolution extrapolation: 128px → 512px
+## Compositional generalization
 
-A model trained at 128×128 can be sampled directly at 512×512. The following
-archived contact sheet shows an instructive failure mode:
+Nothing forces a caption-conditioned model to learn *concepts*; it can equally
+well memorize caption-to-picture pairs. The procedural generator makes the
+difference measurable. Eight `(colour, place)` combinations are withheld from
+training entirely — red at the top left, orange at the top, yellow at the top
+right, green at the left, teal at the centre, blue at the right, purple at the
+bottom left, pink at the bottom — while every colour is still seen in eight
+other places and every place with seven other colours. Only the pairing is kept
+back. Verified on the stream: zero withheld pairs in 8,009 generated objects,
+where 920 would have appeared without the exclusion.
+
+The run is then judged twice: on combinations it trained on, and on the eight it
+never saw.
+
+| step | seen | withheld | scenes |
+| --- | --- | --- | --- |
+| 2,500 | 100% | 88% | 8 |
+| 5,000 | 100% | 100% | 8 |
+| 7,000 | 100% | 100% | 32 |
+
+Chance is 12.5%. The withheld sheet at step 5,000:
+
+![Held-out combinations](docs/assets/shapes-holdout-step5000.png)
+
+**Top: reference scenes. Bottom: generated samples.** The model places a colour
+where it has never been asked to place it, so colour and position are held as
+separate, recombinable pieces rather than as a lookup table. Two caveats: the
+metric reads a colour out of the named cell and does not check the shape, and
+the judged sets are small — eight scenes per in-run row, thirty-two at the end.
+The `--hold-out` flag in the training command above is what sets this up; see
+[experiments](docs/EXPERIMENTS.md) for the withheld list and what the sheets
+show that the score does not.
+
+## Resolution extrapolation, and what the two levels do with it
+
+A model trained at 128×128 can be sampled directly at 512×512, and the result is
+the most interesting thing in this repository. It is not a clean success and it
+is not noise:
 
 ![128px training, 512px generation](docs/assets/canvas-512-stretched.png)
 
-**Top: reference scenes. Bottom: generated samples.** Coarse colour and location
-often persist, but a single shape becomes a cluster of small shapes. The model
-produces a larger canvas; coherent resolution generalization remains unsolved.
+**Top: reference scenes. Bottom: generated samples.** The planner extrapolates:
+each region carries the colour the caption asked for, in the place it asked for,
+at roughly the extent it should occupy. The painter cannot follow it there. It
+has only ever been shown shapes a few tokens across, so when the plan says *this
+whole area is a red triangle* it renders what it knows — red triangles, at the
+only size it has ever drawn, packed across the region.
+
+The swarm is made of the **correct shape**: triangles beget triangles, squares
+beget squares, rings beget rings. The painter never reads the caption as a
+sequence — it receives one pooled vector for the whole image — so shape identity
+must be travelling down through the plan, and is being reinterpreted at the only
+scale the painter has. Correct information, wrong register.
+
 These are direct 512px samples, not enlarged 128px images. GitHub scales the
 contact sheet for display.
 
