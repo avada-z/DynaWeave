@@ -187,16 +187,33 @@ An internal 3-D prototype exists, but its training and evaluation workflow is
 not included in this release. Temporal consistency, longer-clip generation,
 and scaling to real video remain to be evaluated.
 
-## Limitations and release status
+## Where this stands
 
-This is a research snapshot, not a pretrained image-generation product. The
-shape colour diagnostic does not verify geometry, object count or overall
-generation quality. Archived results predate some fixes in the current source;
-weights are not bundled, so exact historical regeneration is not possible from
-this repository alone. No claims of state-of-the-art quality or established
-architectural novelty are made.
+This is active research, published as it goes rather than as a finished
+product. What is here has been built and measured: a procedural generator whose
+captions are exact by construction, a two-level flow that turns out to hold
+colour and position as separable concepts, and a resolution probe whose result
+is worth reading precisely because it is partial. What is not here is a
+pretrained image generator. No weights are bundled, and none of these numbers
+are benchmarks.
 
-The repository contains source code and synthetic visuals only: no datasets, no
-trained weights, and none of the working project's other workflows. No license
-has been chosen yet, so no rights are granted by this snapshot; a `LICENSE`
-file will say what is permitted once one is added.
+The boundaries, stated plainly:
+
+- The colour diagnostic reads a palette colour out of a named cell. It says
+  nothing about geometry, object count or overall quality, which is why every
+  score in the docs is printed next to the picture it came from.
+- Archived results predate some fixes in the current source. The repository
+  reproduces the experiments; it does not reconstruct those exact runs.
+- Everything measured so far is drawn shapes. Photographs, texture and scraped
+  captions are a different problem, and nothing here shows the architecture
+  survives the move.
+- No claim of state of the art, or of established architectural novelty, is
+  made.
+
+Work is ongoing: training the painter across several canvas sizes so it can
+render a plan at a scale it never saw, extending the same hierarchy into video,
+and taking the whole thing off synthetic data. The repository will keep moving,
+and the open questions above are the reason it exists rather than an apology
+for it.
+
+Licensed under [Apache 2.0](LICENSE).
