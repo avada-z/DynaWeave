@@ -1,0 +1,7 @@
+# Install a matching torch/torchvision build for your CUDA runtime.
+torch
+torchvision
+numpy
+Pillow
+tqdm
+transformers

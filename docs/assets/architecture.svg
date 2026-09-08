@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="490" viewBox="0 0 1100 490" role="img" aria-labelledby="title desc">
+ <title id="title">DynaWeave: coarse global planning, fine local painting</title>
+ <desc id="desc">Noisy latent tokens feed a coarse attention planner and a fine SSM painter. The planner supplies layout and features to the painter. Fine velocity updates the latent canvas, which the tiled decoder converts to pixels.</desc>
+ <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#94a3b8"/></marker></defs>
+ <rect width="1100" height="490" rx="18" fill="#0f172a"/>
+ <g font-family="sans-serif" fill="#f1f5f9">
+  <text x="40" y="48" font-size="25" font-weight="bold">DynaWeave</text>
+  <text x="40" y="76" font-size="16" fill="#94a3b8">One latent trajectory. Two spatial prediction levels.</text>
+  <g stroke="#475569" stroke-width="2">
+   <rect x="40" y="230" width="185" height="95" rx="12" fill="#1e293b"/>
+   <rect x="315" y="110" width="280" height="105" rx="12" fill="#164e63"/>
+   <rect x="315" y="280" width="280" height="105" rx="12" fill="#4c1d95"/>
+   <rect x="695" y="280" width="155" height="105" rx="12" fill="#1e293b"/>
+   <rect x="910" y="280" width="150" height="105" rx="12" fill="#14532d"/>
+  </g>
+  <g font-size="18" text-anchor="middle">
+   <text x="132" y="268">Noisy latent canvas</text><text x="132" y="295" font-size="14" fill="#cbd5e1">fine tokens + time</text>
+   <text x="455" y="142">Global planner</text><text x="455" y="169" font-size="14">attention over pooled groups</text><text x="455" y="193" font-size="14">optional text cross-attention</text>
+   <text x="455" y="316">Fine painter</text><text x="455" y="343" font-size="14">SSM scans + spatial routes</text><text x="455" y="367" font-size="14">predict fine velocity</text>
+   <text x="772" y="322">ODE update</text><text x="772" y="350" font-size="14">latent canvas</text>
+   <text x="985" y="322">Tiled decoder</text><text x="985" y="350" font-size="14">overlap + pixels</text>
+  </g>
+  <g fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)">
+   <path d="M225 252H267V162H315"/><path d="M225 295H267V332H315"/>
+   <path d="M455 215V280"/><path d="M595 332H695"/><path d="M850 332H910"/>
+   <path d="M772 385V432H132V325"/>
+  </g>
+  <text x="275" y="138" font-size="13" fill="#cbd5e1">pool</text>
+  <text x="470" y="253" font-size="13" fill="#67e8f9">layout + features</text>
+  <text x="355" y="457" font-size="14" fill="#cbd5e1">Repeat sampling updates; decode the final latent state.</text>
+  <text x="690" y="145" font-size="16" fill="#67e8f9">Planner: O(groups²)</text>
+  <text x="690" y="178" font-size="16" fill="#c4b5fd">Fine spatial mixer: O(tokens)</text>
+  <text x="690" y="205" font-size="13" fill="#94a3b8">At fixed width and bounded routing settings.</text>
+ </g>
+</svg>
